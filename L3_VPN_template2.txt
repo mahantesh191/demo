@@ -1,0 +1,39 @@
+Based on the provided user query, variable values, and the sample configuration schema, here is the generated configuration file for setting up an L3 VPN with the VRF name 'Client_A' on the PE router 'PE-1':
+
+```
+vrf definition Client_A
+    rd 10.0.4.4:100
+    route-target export 100:1
+    route-target import 100:1
+!
+address-family ipv4
+exit-address-family
+
+interface GigabitEthernet0/1
+    vrf forwarding Client_A
+!
+router bgp 100
+    address-family ipv4 vrf Client_A
+        neighbour 10.0.4.1 remote-as 200
+        neighbour 10.0.4.1 activate  
+    exit-address-family 
+end
+```
+
+### Configuration Breakdown:
+1. **VRF Definition**: 
+   - VRF Name: `Client_A`
+   - Route Distinguisher (RD): `10.0.4.4:100` (using `ConnectedRouter's IP: AS number`)
+   - Route Targets: `export` and `import` configurations are set to `100:1` (commonly used values for demonstration).
+
+2. **Interface Configuration**:
+   - Interface: `GigabitEthernet0/1` (which connects to `CE-A1` with IP `10.0.4.2`).
+
+3. **BGP Configuration**:
+   - AS Number of `PE`: `100`, assuming a placeholder since not provided.
+   - Address-family configuration for `ipv4` tied to VRF `Client_A`.
+   - Neighbor set to `10.0.4.1` with AS `200` (using `ConnectedRouter's data`).
+
+### Notes:
+- The AS numbers and Route Target values can be adjusted based on your actual requirements.
+- Ensure that the interface configurations align with your physical setup.
